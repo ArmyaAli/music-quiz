@@ -1,8 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { HigherLower } from "./Components/HigherLower/HigherLower";
 
 import "./Main.css";
 import { HomePage } from "./Pages/HomePage";
+import { QuestionsPage  } from "./Pages/QuestionPage";
 
 function Main() {
   return (
@@ -11,6 +13,9 @@ function Main() {
         <Switch>
           <Route exact path="/">
               <HomePage />
+          </Route>
+          <Route path="/questionsPage">
+              <QuestionsPage />
           </Route>
         </Switch>
       </Router>
