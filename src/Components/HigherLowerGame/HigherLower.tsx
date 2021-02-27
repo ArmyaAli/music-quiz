@@ -1,55 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { HigherLowerStyles } from "./HigherLowerStyles";
 import MOCK_DATA from "../../data.json";
-import axios from "axios";
-
-interface dataType {
-  youtubeID: string;
-  title: string;
-  views: number;
-  likes: number;
-  dislikes: number;
-}
-
-interface Props {
-  score: () => void;  
-}
+import { gameModeProps, dataType } from "../../Util/dataSchema";
 
 const embed = "https://www.youtube.com/embed/";
+
 let count = 0;
-export const HigherLower = (props: Props) => {
+
+const numberWithCommas = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+export const HigherLower = (props: gameModeProps) => {
   const classes = HigherLowerStyles();
-  const [currVideo, setVideo] = useState<dataType>(MOCK_DATA["DATA_SET"][count]);
+  const [currVideo, setVideo] = useState<dataType>(
+    MOCK_DATA["DATA_SET"][count]
+  );
 
   const digits = Math.floor(Math.log10(currVideo.views)) + 1;
   const firstTwo =
     Math.round(Number(String(currVideo.views).substring(0, 2)) / 10) * 10;
-  const presentedViews = (firstTwo / 10) * (10 ** (digits - 1));
-
-  const numberWithCommas = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
+  const presentedViews = (firstTwo / 10) * 10 ** (digits - 1);
 
   const checkIfCorrect = (input: string): boolean => {
     console.log(currVideo.views, presentedViews);
-    if (input === "Higher" && currVideo.views > presentedViews)
-    {
+    if (input === "Higher" && currVideo.views > presentedViews) {
       props.score();
       return true;
-    }
-    else if (input === "Lower" && currVideo.views < presentedViews)
-    {
+    } else if (input === "Lower" && currVideo.views < presentedViews) {
       props.score();
       return true;
-    }
-    else return false;
+    } else return false;
   };
 
   const handleHigherClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     console.log(checkIfCorrect("Higher"));
-    
+
     setVideo(MOCK_DATA["DATA_SET"][++count]);
   };
 
