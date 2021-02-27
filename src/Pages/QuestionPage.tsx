@@ -7,13 +7,18 @@ import {
   useParams,
   useRouteMatch,
 } from "react-router-dom";
-import { HigherLower } from "../Components/HigherLower/HigherLower";
+import { HigherLower } from "../Components/HigherLowerGame/HigherLower";
 
-const score = 100;
 const possibleRoutes = [];
 
 export const QuestionsPage = () => {
   let { path, url } = useRouteMatch();
+  const [score, setScore] = useState<number>(0);
+
+  const updateScore = (): void => {
+    setScore(score + 1);
+  };
+
   return (
     <div>
       <h2>Score: {score}</h2>
@@ -22,7 +27,7 @@ export const QuestionsPage = () => {
       <Switch>
         <Route exact path={path}></Route>
         <Route path={`${path}/:gametype`}>
-          <HigherLower />
+          <HigherLower score={updateScore} />
         </Route>
       </Switch>
     </div>
