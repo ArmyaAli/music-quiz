@@ -1,8 +1,7 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { HigherLower } from "./Components/HigherLower/HigherLower";
-
+import React from "react"
 import "./Main.css";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { HigherLower } from "./Components/HigherLowerGame/HigherLower";
 import { HomePage } from "./Pages/HomePage";
 import { QuestionsPage  } from "./Pages/QuestionPage";
 
