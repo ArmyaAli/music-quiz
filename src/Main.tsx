@@ -1,5 +1,4 @@
 import React from "react"
-import "./Main.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { HigherLower } from "./Components/HigherLowerGame/HigherLower";
 import { HomePage } from "./Pages/HomePage";
@@ -7,7 +6,7 @@ import { QuestionsPage  } from "./Pages/QuestionPage";
 
 function Main() {
   return (
-    <div>
+    <div className="bg-gray-100">
       <Router>
         <Switch>
           <Route exact path="/">
