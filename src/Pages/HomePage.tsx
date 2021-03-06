@@ -10,7 +10,7 @@ export const HomePage = () => {
   return (
     <div>
       Home Page
-      <button>
+      <button className="block">
         <Link to="/questionsPage">
           Play Game
         </Link>
