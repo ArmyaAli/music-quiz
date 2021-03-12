@@ -1,8 +1,11 @@
 import requests
 import pyodbc
 from bs4 import BeautifulSoup
+from decouple import config
 
-cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=198.71.227.2;DATABASE=projects;UID=projects;PWD=P@ssw0rd@#')
+CONN_STR = config('CONN_STR')
+
+cnxn = pyodbc.connect(CONN_STR)
 cursor = cnxn.cursor()
 
 response = requests.get("https://spotifycharts.com/regional/us/daily/latest")
