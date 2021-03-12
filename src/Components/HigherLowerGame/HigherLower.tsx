@@ -23,12 +23,12 @@ export const HigherLower = (props: gameModeProps) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(
-          "https://ikengo.net/Projects/highlow/getrandomsong"
-        );
-        setData(response.data);
+        // const response = await axios.get(
+        //   "https://ikengo.net/Projects/highlow/getrandomsong"
+        // );
+        setData(MOCK_DATA["DATA_SET"]);
         if (data) {
-          setVideo(data[0] as dataType);
+          setVideo(data[count] as dataType);
           if (currVideo) {
             setDigits(Math.floor(Math.log10(currVideo.views)) + 1);
             setfirstTwo(
@@ -85,8 +85,8 @@ export const HigherLower = (props: gameModeProps) => {
             Is this video's view count Higher or Lower than this number
           </h2>
           <div className="text-center text-3xl italic font-extrabold mb-8 text-yellow-300">
-            {/* {numberWithCommas(presentedViews)} */}
-            {numberWithCommas(28540000)}
+            {numberWithCommas(presentedViews)}
+            {/* {numberWithCommas(28540000)} */}
           </div>
           <iframe
             className="mx-auto w-3/5 md:w-3/6"
