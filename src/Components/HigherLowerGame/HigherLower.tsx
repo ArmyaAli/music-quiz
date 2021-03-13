@@ -6,8 +6,11 @@ import axios from "axios";
 import MOCK_DATA from "../../data.json";
 import { Divider } from "@material-ui/core";
 
+
 const embed = "https://www.youtube.com/embed/";
 let count = 0;
+let thumbnail1: string
+let thumbnail2: string
 
 const numberWithCommas = (x: number) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -29,31 +32,35 @@ export const HigherLower = (props: gameModeProps) => {
   let roundedViews2 = 0;
 
   if (!isLoading) {
-    console.log(data, currVideo1, currVideo2)
+    console.log(data, currVideo1, currVideo2);
     roundedViews1 = rounding(currVideo1!.views);
     roundedViews2 = rounding(currVideo2!.views);
+    thumbnail1 = `https://img.youtube.com/vi/${currVideo1?.youtubeID}/hqdefault.jpg`;
+    thumbnail2 = `https://img.youtube.com/vi/${currVideo2?.youtubeID}/hqdefault.jpg`;
   }
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const response = await axios.get(
-          "https://ikengo.net/Projects/highlow/getrandomsong"
-        );
-        console.log(response.data);
-        setData(response.data["DATA_SET"]);
-        setVideo1(response.data["DATA_SET"][count]);
-        setVideo2(response.data["DATA_SET"][count + 1]);
-        setIsLoading(false);
-      } catch (err) {
-        console.error(`Error occured:${err}`);
-      }
-    };
-    getData();
 
-    //   setData(MOCK_DATA["DATA_SET"]);
-    //   setVideo1(MOCK_DATA["DATA_SET"][count]);
-    //   setVideo2(MOCK_DATA["DATA_SET"][count + 1]);
+  useEffect(() => {
+    // const getData = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       "https://ikengo.net/Projects/highlow/getrandomsong"
+    //     );
+    //     console.log(response.data);
+    //     setData(response.data["DATA_SET"]);
+    //     setVideo1(response.data["DATA_SET"][count]);
+    //     setVideo2(response.data["DATA_SET"][count + 1]);
+    //     setIsLoading(false);
+    //   } catch (err) {
+    //     console.error(`Error occured:${err}`);
+    //   }
+    // };
+    // getData();
+
+    setData(MOCK_DATA["DATA_SET"]);
+    setVideo1(MOCK_DATA["DATA_SET"][count]);
+    setVideo2(MOCK_DATA["DATA_SET"][count + 1]);
+    setIsLoading(false);
   }, []);
 
   const checkIfCorrect = (input: string): boolean => {
@@ -69,7 +76,7 @@ export const HigherLower = (props: gameModeProps) => {
       return true;
     } else return false;
   };
-  
+
   const handleHigherClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -92,20 +99,22 @@ export const HigherLower = (props: gameModeProps) => {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen bg-black">
+      <div className="flex h-screen ">
         <div className="m-auto text-6xl">
-            <img src="../../loading.gif" alt="loading..."/>
+          <img src="../../loading.gif" alt="loading..." />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="game-container">
+    <div className="game-container h-screen">
+      <div id="leftHalf" style={{background: `url(${thumbnail1}) no-repeat center center / cover`}} ></div>
+      <div className="rightHalf" style={{background: `url(${thumbnail2}) no-repeat center center / cover`}} ></div>
       <div className="flex flex-col h-full">
-        <div className="mx-auto flex justify-center h-full my-8 w-full">
-          <div className="w-2/5">
-            <div className="text-center text-2xl italic font-extrabold mb-8 text-yellow-300">
+        <div className="mx-auto flex justify-center my-8 w-full">
+          <div className="h-1/5 w-2/5">
+            <div className="text-center text-2xl italic font-extrabold mb-8 text-purple-300">
               {currVideo1?.title}
             </div>
             <iframe
@@ -118,7 +127,7 @@ export const HigherLower = (props: gameModeProps) => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
-            <div className="text-center text-2xl italic font-extrabold mb-8 text-yellow-300">
+            <div className="text-center text-2xl italic font-extrabold mb-8 text-white">
               {numberWithCommas(roundedViews1)}
             </div>
           </div>
@@ -138,28 +147,31 @@ export const HigherLower = (props: gameModeProps) => {
             ></iframe>
           </div>
         </div>
-
-        <div className="text-center text-2xl font-extrabold mb-8 text-black-300">
-          {currVideo2?.title} has
-        </div>
-
-        <div className="mx-auto flex">
-          <button
-            className="p-4 border border-green-500 bg-green-300 hover:bg-green-400 hover:text-white text-green-100 mx-4 w-24 text-center rounded"
-            onClick={handleHigherClick}
-          >
-            Higher
-          </button>
-          <div className="text-center text-2xl font-extrabblack mb-8 text-black-300"> OR </div>
-          <button
-            className="p-4 border rounded border-red-500 text-black bg-red-300 hover:bg-red-400 text-red-100 mx-4 w-24 text-center rounded"
-            onClick={handleLowerClick}
-          >
-            Lower
-          </button>
-        </div>
-        <div className="text-center text-2xl font-medium mb-8 text-black-300">
-          views than {currVideo1?.title}
+        <div className="flex flex-col">
+          <div className="text-center text-2xl font-extrabold mb-8 text-yellow-300">
+            {currVideo2?.title}{" "}
+            <span className="text-black-800 text-1xl font-extrablack">has</span>
+          </div>
+          <div className="mx-auto my-4 flex">
+            <button
+              className="p-4 border border-green-500 bg-green-300 hover:bg-green-400 hover:text-white font-extrabold text-green-100 mx-4 w-48 text-center rounded text-3xl"
+              onClick={handleHigherClick}
+            >
+              Higher ↑
+            </button>
+            <span className="flex justify-center items-center text-1xl font-extrablack text-white">
+              OR
+            </span>
+            <button
+              className="p-4 border border-red-500 bg-red-300 hover:bg-red-400 text-red-100  font-extrabold mx-4  w-48 text-center rounded text-3xl bold"
+              onClick={handleLowerClick}
+            >
+              ↓ Lower
+            </button>
+          </div>
+          <div className="text-center text-2xl font-medium text-purple-300">
+            <span className="text-black-800 text-1xl font-extrablack"> views than </span> {currVideo1?.title}
+          </div>
         </div>
       </div>
     </div>
