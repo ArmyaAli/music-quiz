@@ -1,3 +1,24 @@
+html, body {
+    height: 100%;
+    width: 100%;
+}
 .game-container {
     height: calc(100% - 64px);
 }
+
+#leftHalf {
+    width: 50%;
+    position: absolute;
+    left: 0px;
+    height: calc(100% - 64px);
+    z-index: -1;
+    filter: brightness(50%);
+ }
+ .rightHalf {
+    width: 50%;
+    position: absolute;
+    right: 0px;
+    height: calc(100% - 64px);
+    z-index: -1;
+    filter: brightness(50%)
+ }
