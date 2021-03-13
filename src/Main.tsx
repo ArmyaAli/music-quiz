@@ -6,7 +6,7 @@ import { QuestionsPage  } from "./Pages/QuestionPage";
 
 function Main() {
   return (
-    <div className="bg-gray-100">
+    <div>
       <Router>
         <Switch>
           <Route exact path="/">
