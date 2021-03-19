@@ -148,9 +148,9 @@ export const HigherLower = (props: gameModeProps) => {
           </div>
         </div>
         <div className="flex flex-col">
-          <div className="text-center text-2xl font-extrabold mb-8 text-yellow-300">
+          <div className="text-center text-2xl font-medium text-yellow-300">
             {currVideo2?.title}{" "}
-            <span className="text-black-800 text-1xl font-extrablack">has</span>
+            <span className="text-gray-300 text-1xl font-extrabold">has</span>
           </div>
           <div className="mx-auto my-4 flex">
             <button
@@ -170,7 +170,7 @@ export const HigherLower = (props: gameModeProps) => {
             </button>
           </div>
           <div className="text-center text-2xl font-medium text-purple-300">
-            <span className="text-black-800 text-1xl font-extrablack"> views than </span> {currVideo1?.title}
+            <span className="text-gray-300 text-1xl font-extrabold"> views than </span> {currVideo1?.title}
           </div>
         </div>
       </div>
