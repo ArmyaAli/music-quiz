@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { gameModeProps, dataType } from "../../Util/dataSchema";
 import "./higherlower.css";
 import axios from "axios";
+import CountUp from "react-countup";
 
 import MOCK_DATA from "../../data.json";
 import { Divider } from "@material-ui/core";
@@ -11,10 +12,6 @@ const embed = "https://www.youtube.com/embed/";
 let count = 0;
 let thumbnail1: string
 let thumbnail2: string
-
-const numberWithCommas = (x: number) => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
 
 const rounding = (x: number): number => {
   const digits = Math.floor(Math.log10(x) + 1);
@@ -81,21 +78,24 @@ export const HigherLower = (props: gameModeProps) => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     console.log(checkIfCorrect("Higher"));
-    if (data) {
-      setVideo1(data[++count]);
-      setVideo2(data[count + 1]);
-    }
+    loadVideos();
   };
 
   const handleLowerClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     console.log(checkIfCorrect("Lower"));
+    loadVideos();
+  };
+
+  const loadVideos = () => // put in next video
+  {
+
     if (data) {
       setVideo1(data[++count]);
       setVideo2(data[count + 1]);
     }
-  };
+  }
 
   if (isLoading) {
     return (
@@ -112,7 +112,7 @@ export const HigherLower = (props: gameModeProps) => {
       <div id="leftHalf" style={{background: `url(${thumbnail1}) no-repeat center center / cover`}} ></div>
       <div className="rightHalf" style={{background: `url(${thumbnail2}) no-repeat center center / cover`}} ></div>
       <div className="flex flex-col h-full">
-        <div className="mx-auto flex justify-center my-8 w-full">
+        <div className="mx-auto flex justify-center my-8 w-full py-52 ">
           <div className="h-1/5 w-2/5">
             <div className="text-center text-2xl italic font-extrabold mb-8 text-purple-300">
               {currVideo1?.title}
@@ -120,6 +120,7 @@ export const HigherLower = (props: gameModeProps) => {
             <iframe
               className="mx-auto w-3/5 md:w-3/6 my-4"
               title="video"
+              style={{border: `3px solid #c4b5fc`, borderRadius: `30px`}}
               height="250"
               width="400"
               src={embed + currVideo1?.youtubeID}
@@ -128,7 +129,11 @@ export const HigherLower = (props: gameModeProps) => {
               allowFullScreen
             ></iframe>
             <div className="text-center text-2xl italic font-extrabold mb-8 text-white">
-              {numberWithCommas(roundedViews1)}
+            <CountUp 
+                end={roundedViews1} 
+                duration={1}
+                separator = ","
+              />
             </div>
           </div>
           <div className="w-2/5">
@@ -138,6 +143,7 @@ export const HigherLower = (props: gameModeProps) => {
             <iframe
               className="mx-auto w-3/5 md:w-3/6 my-4"
               title="video"
+              style={{border: `3px solid #fcd34d`, borderRadius: `30px`}}
               height="250"
               width="400"
               src={embed + currVideo2?.youtubeID}
@@ -145,6 +151,13 @@ export const HigherLower = (props: gameModeProps) => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
+            <div className="text-center text-2xl italic font-extrabold mb-8 text-white">
+            <CountUp 
+                end={roundedViews2} 
+                duration={1}
+                separator = ","
+              />
+            </div>
           </div>
         </div>
         <div className="flex flex-col">
