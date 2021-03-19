@@ -70,25 +70,25 @@ export const Thumbnails= (props: gameModeProps) => {
   };
 
   return (
-    <div>
-      <h2>Name the title of the video the thumbnail is associated with:</h2>
-      <div>
+    <div className="h-4/5 w-full">
+      <h2 className="mx-auto text-center my-4  text-2xl font-medium text-yellow-300">Name the title of the video the thumbnail is associated with</h2>
         <img
+        className="m-auto"
           alt={MOCK_DATA["DATA_SET"][count].title}
           src={URL}
           width="560"
           height="315"
         ></img>
-      </div>
-      <div>
+       <div className="w-96 mx-auto my-4">
         <input 
+          className="border-solid border-2 rounded bg-gray-200 p-2 mx-4"
           type="text" 
           id="answer"
           value={answer}
           onChange={handleChange}
           onKeyDown={handleEnter}
         />
-        <button onClick={handleAnswerClick}>Submit</button>
+        <button className="p-4 border rounded border-green-500 bg-green-300 hover:bg-green-400 text-white" onClick={handleAnswerClick}>Submit</button>
       </div>
     </div>
   );
