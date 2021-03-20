@@ -32,9 +32,9 @@ export const QuestionsPage = () => {
       <hr />
       <Switch>
         <Route exact path={path}></Route>
-        {/* <Route path={`${path}/higherlower`}>
+        <Route path={`${path}/higherlower`}>
           <HigherLower score={updateScore} />
-        </Route> */}
+        </Route>
         <Route path={`${path}/thumbnails`}>
           <Thumbnails score={updateScore} />
         </Route>

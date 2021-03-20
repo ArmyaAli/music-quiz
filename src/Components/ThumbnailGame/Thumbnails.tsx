@@ -33,8 +33,8 @@ export const Thumbnails= (props: gameModeProps) => {
 
   const checkIfCorrect = (input: string): boolean => {
     if (currVideo) {
-      console.log(input.toLowerCase().trim())
-      console.log(currVideo.title.toLowerCase().trim())
+      // console.log(input.toLowerCase().trim())
+      // console.log(currVideo.title.toLowerCase().trim())
       if (input.toLowerCase().trim() === currVideo.title.toLowerCase().trim()) {
         props.score();
         return true;
