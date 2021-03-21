@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useReducer, useState } from "react";
 import { gameModeProps, dataType } from "../../Util/dataSchema";
 import "./higherlower.css";
 import axios from "axios";
@@ -22,7 +22,7 @@ export const HigherLower = (props: gameModeProps) => {
   const [currVideo1, setVideo1] = useState<dataType | null>(null);
   const [currVideo2, setVideo2] = useState<dataType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [showView, setShowView] = useState<string>("invisible");
+  const [viewState, setViewState] = useState<boolean>(false); //false = invisible
   let roundedViews1 = 0;
   let roundedViews2 = 0;
 
@@ -54,11 +54,9 @@ export const HigherLower = (props: gameModeProps) => {
     setVideo1(MOCK_DATA["DATA_SET"][count]);
     setVideo2(MOCK_DATA["DATA_SET"][count + 1]);
     setIsLoading(false);
-
   }, []);
 
   const checkIfCorrect = (input: string): boolean => {
-    // (roundedViews1, roundedViews2);
     if (input === "Higher" && roundedViews2 > roundedViews1) {
       props.score();
       return true;
@@ -74,18 +72,14 @@ export const HigherLower = (props: gameModeProps) => {
   const handleHigherClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    // console.log(checkIfCorrect("Higher"));
-    console.log(showView);
-    setShowView("visible");
+    console.log(checkIfCorrect("Higher"));
     loadVideos();
   };
 
   const handleLowerClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    // console.log(checkIfCorrect("Lower"));
-    console.log(showView);
-    setShowView("visible");
+    console.log(checkIfCorrect("Lower"));
     loadVideos();
   };
 
@@ -97,14 +91,12 @@ export const HigherLower = (props: gameModeProps) => {
   const loadVideos = () =>
     // put in next video
     {
-      
-      
-      sleep(0).then(() => {
-        console.log(showView)
+      setViewState(true);
+      sleep(1500).then(() => {
         if (data) {
           setVideo1(data[++count]);
           setVideo2(data[count + 1]);
-          setShowView("invisible");
+          setViewState(false);
         }
       }) 
     };
@@ -150,7 +142,7 @@ export const HigherLower = (props: gameModeProps) => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
-            <div className="text-center text-2xl italic font-extrabold mb-8 text-white">
+            <div className={"text-center text-2xl italic font-extrabold mb-8 text-white"}>
               <CountUp end={roundedViews1} duration={0.75} separator="," />
             </div>
           </div>
@@ -169,12 +161,11 @@ export const HigherLower = (props: gameModeProps) => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
-            <div className="text-center text-2xl italic font-extrabold mb-8 text-white">
+            <div className={viewState ? "visible text-center text-2xl italic font-extrabold mb-8 text-white" : "invisible"}>
               <CountUp
-                className={showView}
                 end={roundedViews2}
                 duration={0.75}
-                separator=","
+                separator={viewState ? "," : ""} // change separator to force rerender aka redraw
               />
             </div>
           </div>
