@@ -34,26 +34,26 @@ export const HigherLower = (props: gameModeProps) => {
   }
 
   useLayoutEffect(() => {
-    // const getData = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       "https://ikengo.net/Projects/highlow/getrandomsong"
-    //     );
-    //     console.log(response.data);
-    //     setData(response.data["DATA_SET"]);
-    //     setVideo1(response.data["DATA_SET"][count]);
-    //     setVideo2(response.data["DATA_SET"][count + 1]);
-    //     setIsLoading(false);
-    //   } catch (err) {
-    //     console.error(`Error occured:${err}`);
-    //   }
-    // };
-    // getData();
+    const getData = async () => {
+      try {
+        const response = await axios.get(
+          "https://ikengo.net/Projects/highlow/getrandomsong/10"
+        );
+        console.log(response.data);
+        setData(response.data["DATA_SET"]);
+        setVideo1(response.data["DATA_SET"][count]);
+        setVideo2(response.data["DATA_SET"][count + 1]);
+        setIsLoading(false);
+      } catch (err) {
+        console.error(`Error occured:${err}`);
+      }
+    };
+    getData();
 
-    setData(MOCK_DATA["DATA_SET"]);
-    setVideo1(MOCK_DATA["DATA_SET"][count]);
-    setVideo2(MOCK_DATA["DATA_SET"][count + 1]);
-    setIsLoading(false);
+    // setData(MOCK_DATA["DATA_SET"]);
+    // setVideo1(MOCK_DATA["DATA_SET"][count]);
+    // setVideo2(MOCK_DATA["DATA_SET"][count + 1]);
+    // setIsLoading(false);
   }, []);
 
   const checkIfCorrect = (input: string): boolean => {
@@ -72,14 +72,14 @@ export const HigherLower = (props: gameModeProps) => {
   const handleHigherClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    console.log(checkIfCorrect("Higher"));
+    checkIfCorrect("Higher");
     loadVideos();
   };
 
   const handleLowerClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    console.log(checkIfCorrect("Lower"));
+    checkIfCorrect("Lower");
     loadVideos();
   };
 
@@ -112,7 +112,7 @@ export const HigherLower = (props: gameModeProps) => {
   }
 
   return (
-    <div className="game-container h-screen">
+    <div className="game-container h-full">
       <div
         id="leftHalf"
         style={{
@@ -126,7 +126,7 @@ export const HigherLower = (props: gameModeProps) => {
         }}
       ></div>
       <div className="flex flex-col h-full">
-        <div className="mx-auto flex justify-center my-8 w-full lg:pt-52 lg:pb-16 md:py-0.5 md:pb-0.5">
+        <div className="mx-auto flex justify-center my-8 w-full lg:pt-52d">
           <div className="w-3/5">
             <div className="text-center w-full h-16 lg:text-2xl md:text-1x1  italic font-extrabold mb-8 text-purple-300">
               {currVideo1?.title}
