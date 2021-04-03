@@ -1,19 +1,17 @@
-import React, { useEffect, useLayoutEffect, useReducer, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { gameModeProps, dataType } from "../../Util/dataSchema";
 import "./higherlower.css";
 import axios from "axios";
 import CountUp from "react-countup";
-import MOCK_DATA from "../../data.json";
 
 const embed = "https://www.youtube.com/embed/";
-let count = 0;
 let thumbnail1: string;
 let thumbnail2: string;
 
 const rounding = (x: number): number => {
   const digits = Math.floor(Math.log10(x) + 1);
-  const firstTwo = Math.round(Number(String(digits).substring(0, 2)) / 10) * 10;
-  const rounded = (firstTwo / 10) * 10 ** (digits - 1);
+  const secondThird = Math.round(Number(String(x).substring(1, 3)) / 10) * 10;
+  const rounded = Number(String(x).substring(0, 1)) * 10 ** (digits - 1) + (secondThird / 10) * 10 ** (digits - 2);
   return rounded;
 };
 
@@ -23,6 +21,7 @@ export const HigherLower = (props: gameModeProps) => {
   const [currVideo2, setVideo2] = useState<dataType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [viewState, setViewState] = useState<boolean>(false); //false = invisible
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
   let roundedViews1 = 0;
   let roundedViews2 = 0;
 
@@ -32,28 +31,26 @@ export const HigherLower = (props: gameModeProps) => {
     thumbnail1 = `https://img.youtube.com/vi/${currVideo1?.youtubeID}/hqdefault.jpg`;
     thumbnail2 = `https://img.youtube.com/vi/${currVideo2?.youtubeID}/hqdefault.jpg`;
   }
+  const getData = async (no: number) => {
+    const data = await axios.get(
+      `https://ikengo.net/Projects/highlow/getrandomsong/${no}`
+    );
+    return data.data["DATA_SET"];
+  };
 
   useLayoutEffect(() => {
-    const getData = async () => {
+    const init = async () => {
       try {
-        const response = await axios.get(
-          "https://ikengo.net/Projects/highlow/getrandomsong/10"
-        );
-        console.log(response.data);
-        setData(response.data["DATA_SET"]);
-        setVideo1(response.data["DATA_SET"][count]);
-        setVideo2(response.data["DATA_SET"][count + 1]);
+        const response = await getData(5);
+        setData(response);
+        setVideo1(response[0]);
+        setVideo2(response[1]);
         setIsLoading(false);
       } catch (err) {
         console.error(`Error occured:${err}`);
       }
     };
-    getData();
-
-    // setData(MOCK_DATA["DATA_SET"]);
-    // setVideo1(MOCK_DATA["DATA_SET"][count]);
-    // setVideo2(MOCK_DATA["DATA_SET"][count + 1]);
-    // setIsLoading(false);
+    init();
   }, []);
 
   const checkIfCorrect = (input: string): boolean => {
@@ -83,7 +80,6 @@ export const HigherLower = (props: gameModeProps) => {
     loadVideos();
   };
 
-
   function sleep(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
@@ -91,14 +87,20 @@ export const HigherLower = (props: gameModeProps) => {
   const loadVideos = () =>
     // put in next video
     {
+      setIsProcessing(true);
       setViewState(true);
-      sleep(1500).then(() => {
+      sleep(750).then(async () => {
         if (data) {
-          setVideo1(data[++count]);
-          setVideo2(data[count + 1]);
+          const newSong = await getData(1);
+          const _data = [...data];
+          _data.push(newSong[0]);
+          setVideo1(_data.slice(1)[0]);
+          setVideo2(_data.slice(1)[1]);
+          setData(_data.slice(1));
           setViewState(false);
+          setIsProcessing(false);
         }
-      }) 
+      });
     };
 
   if (isLoading) {
@@ -111,18 +113,21 @@ export const HigherLower = (props: gameModeProps) => {
     );
   }
 
+  if (isProcessing) {
+  }
+
   return (
     <div className="game-container h-full">
       <div
         id="leftHalf"
         style={{
-          background: `url(${thumbnail1}) no-repeat center center / cover`,
+          background: `linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(${thumbnail1}) repeat center center / cover`,
         }}
       ></div>
       <div
         className="rightHalf"
         style={{
-          background: `url(${thumbnail2}) no-repeat center center / cover`,
+          background: `linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(${thumbnail2}) repeat center center / cover`,
         }}
       ></div>
       <div className="flex flex-col h-full">
@@ -142,8 +147,12 @@ export const HigherLower = (props: gameModeProps) => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
-            <div className={"text-center text-2xl italic font-extrabold mb-8 text-white"}>
-              <CountUp end={roundedViews1} duration={0.75} separator="," />
+            <div
+              className={
+                "text-center text-2xl italic font-extrabold mb-8 text-white"
+              }
+            >
+              <CountUp end={roundedViews1} duration={0.75} separator="," /> views
             </div>
           </div>
           <div className="w-3/5">
@@ -161,12 +170,19 @@ export const HigherLower = (props: gameModeProps) => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             ></iframe>
-            <div className={viewState ? "visible text-center text-2xl italic font-extrabold mb-8 text-white" : "invisible"}>
+            <div
+              className={
+                viewState
+                  ? "visible text-center text-2xl italic font-extrabold mb-8 text-white"
+                  : "invisible"
+              }
+            >
               <CountUp
                 end={roundedViews2}
                 duration={0.75}
                 separator={viewState ? "," : ""} // change separator to force rerender aka redraw
               />
+              {`${viewState ? " views" : ""}`}
             </div>
           </div>
         </div>
@@ -178,12 +194,18 @@ export const HigherLower = (props: gameModeProps) => {
           <div className="mx-auto my-4 flex flex-wrap">
             <button
               className="p-4 border border-green-500 bg-green-300 hover:bg-green-400 hover:text-white font-extrabold text-green-100 mx-4 w-28 text-center rounded text-lg md:w-48 md:text-3xl"
+              disabled={isProcessing ? true : false}
               onClick={handleHigherClick}
             >
               Higher ↑
             </button>
-            <span className="flex text-center justify-center items-center md:text-3xl font-extrablack text-white">
-              OR
+            <span className={`flex text-center justify-center items-center md:text-3xl font-extrablack text-white`}>
+              { !isProcessing ? `OR` :
+              <div className="flex">
+                <div className="m-auto text-6xl">
+                  <img src="../../loading.gif" alt="loading..." width="40.5667" height="70"/>
+                </div>
+              </div>}
             </span>
             <button
               className="p-4 border border-red-500 bg-red-300 hover:bg-red-400 hover:text-white font-extrabold text-red-100 mx-4 w-28 text-center rounded text-lg md:w-48 md:text-3xl"

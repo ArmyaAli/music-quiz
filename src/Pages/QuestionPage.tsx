@@ -8,7 +8,7 @@ import {
 import { HigherLower } from "../Components/HigherLowerGame/HigherLower";
 import { Thumbnails } from "../Components/ThumbnailGame/Thumbnails";
 
-const possibleRoutes: string[] = ["/thumbnails"];
+const possibleRoutes: string[] = ["/higherlower", /*"/thumbnail"*/];
 const randomNum = Math.floor(Math.random() * possibleRoutes.length);
 
 export const QuestionsPage = () => {
