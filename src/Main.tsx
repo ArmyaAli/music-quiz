@@ -1,8 +1,9 @@
-import React from "react"
+import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { HigherLower } from "./Components/HigherLowerGame/HigherLower";
 import { HomePage } from "./Pages/HomePage";
-import { QuestionsPage  } from "./Pages/QuestionPage";
+import { QuestionsPage } from "./Pages/QuestionPage";
+import { ResultsPage } from "./Pages/ResultsPage";
 
 function Main() {
   return (
@@ -10,10 +11,13 @@ function Main() {
       <Router>
         <Switch>
           <Route exact path="/">
-              <HomePage />
+            <HomePage />
           </Route>
           <Route path="/questionsPage">
-              <QuestionsPage />
+            <QuestionsPage />
+          </Route>
+          <Route path="/resultsPage">
+            <ResultsPage />
           </Route>
         </Switch>
       </Router>
