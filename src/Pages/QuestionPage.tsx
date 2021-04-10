@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router";
+
 import {
   Switch,
   Route,
@@ -7,6 +9,7 @@ import {
 } from "react-router-dom";
 import { HigherLower } from "../Components/HigherLowerGame/HigherLower";
 import { Thumbnails } from "../Components/ThumbnailGame/Thumbnails";
+import { stateManagement } from "./common";
 
 const possibleRoutes: string[] = ["/higherlower", /*"/thumbnail"*/];
 const randomNum = Math.floor(Math.random() * possibleRoutes.length);
@@ -14,8 +17,8 @@ const randomNum = Math.floor(Math.random() * possibleRoutes.length);
 export const QuestionsPage = () => {
   let { path, url } = useRouteMatch();
   const [score, setScore] = useState<number>(0);
-
   const updateScore = (): void => {
+    stateManagement.GLOBAL_SCORE = score + 1;
     setScore(score + 1);
   };
 
