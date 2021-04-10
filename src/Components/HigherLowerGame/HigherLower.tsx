@@ -1,8 +1,10 @@
 import React, { useLayoutEffect, useState } from "react";
+import dataSet from "../../data.json"
 import { gameModeProps, dataType } from "../../Util/dataSchema";
 import "./higherlower.css";
 import axios from "axios";
 import CountUp from "react-countup";
+import { Router, useHistory } from "react-router";
 
 const embed = "https://www.youtube.com/embed/";
 let thumbnail1: string;
@@ -22,6 +24,7 @@ export const HigherLower = (props: gameModeProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [viewState, setViewState] = useState<boolean>(false); //false = invisible
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const history = useHistory();
   let roundedViews1 = 0;
   let roundedViews2 = 0;
 
@@ -31,11 +34,12 @@ export const HigherLower = (props: gameModeProps) => {
     thumbnail1 = `https://img.youtube.com/vi/${currVideo1?.youtubeID}/hqdefault.jpg`;
     thumbnail2 = `https://img.youtube.com/vi/${currVideo2?.youtubeID}/hqdefault.jpg`;
   }
+  
   const getData = async (no: number) => {
-    const data = await axios.get(
-      `https://ikengo.net/Projects/highlow/getrandomsong/${no}`
-    );
-    return data.data["DATA_SET"];
+    // const data = await axios.get(
+    //   `https://ikengo.net/Projects/highlow/getrandomsong/${no}`
+    // );
+    return dataSet["DATA_SET"];
   };
 
   useLayoutEffect(() => {
@@ -63,7 +67,10 @@ export const HigherLower = (props: gameModeProps) => {
     } else if (roundedViews1 === roundedViews2) {
       props.score();
       return true;
-    } else return false;
+    } else {
+        history.push('/resultsPage');
+        return false;
+    }
   };
 
   const handleHigherClick = (
@@ -89,7 +96,7 @@ export const HigherLower = (props: gameModeProps) => {
     {
       setIsProcessing(true);
       setViewState(true);
-      sleep(750).then(async () => {
+      sleep(1250).then(async () => {
         if (data) {
           const newSong = await getData(1);
           const _data = [...data];
@@ -119,7 +126,7 @@ export const HigherLower = (props: gameModeProps) => {
   return (
     <div className="game-container h-full">
       <div
-        id="leftHalf"
+        className="leftHalf"
         style={{
           background: `linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url(${thumbnail1}) repeat center center / cover`,
         }}
